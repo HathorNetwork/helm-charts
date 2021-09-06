@@ -1,5 +1,5 @@
 apiVersion: v2
-name: hathor-core
+name: hathor-fullnode
 description: Official Hathor Network helm chart for hathor-core full-node.
 maintainers:
 - email: contact@hathor.network
