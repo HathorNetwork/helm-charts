@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "hathor-full-node.fullname" . }}
+  labels:
+    {{- include "hathor-full-node.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  serviceName: {{ include "hathor-full-node.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "hathor-full-node.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "hathor-full-node.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "hathor-full-node.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: generate-peer-id
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          command:
+          - /bin/sh
+          - -c
+          - |-
+            peer_id_file=/data/peer_id.json; \
+            if ! [ -f "$peer_id_file" ] ; then \
+              python -m hathor gen_peer_id > $peer_id_file;
+            fi 
+          volumeMounts:
+          - name: full-node-data
+            mountPath: /data
+        - name: download-snapshot
+          image: busybox:1.33.1
+          imagePullPolicy: IfNotPresent
+          command:
+          - /bin/sh
+          - -c
+          - |-
+            if ! [ -d "/data/data_v2.db" ] ; then
+              wget -P /data $(wget -qO- {{ .Values.hathor.snapshotUrl }})
+            fi 
+            if [ -f /data/*.tar.gz ] ; then
+              tar xzvf /data/*.tar.gz
+              rm /data/*.tar.gz
+            fi
+          volumeMounts:
+          - name: full-node-data
+            mountPath: /data
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ['run_node', '--testnet', '--data', '/data', '--peer', '/data/peer_id.json', '--cache', '--cache-size', '1000']
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /v1a/status
+              port: http
+            failureThreshold: 48
+            periodSeconds: 300
+          livenessProbe:
+            httpGet:
+              path: /v1a/status
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /v1a/status
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+            {{- toYaml .Values.envFrom | nindent 12 }}
+          volumeMounts:
+          - name: full-node-data
+            mountPath: /data
+      volumes:
+      - name: full-node-data
+        persistentVolumeClaim:
+          claimName: {{ include "hathor-full-node.fullname" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
