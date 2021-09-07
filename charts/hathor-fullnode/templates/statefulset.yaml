@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "hathor-full-node.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.statefulset.replicas }}
   serviceName: {{ include "hathor-full-node.fullname" . }}
   selector:
     matchLabels:
