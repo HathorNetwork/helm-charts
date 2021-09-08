@@ -3,6 +3,21 @@ entries:
   hathor-fullnode:
   - apiVersion: v2
     appVersion: v0.41.0
+    created: "2021-09-08T14:30:51.394246664Z"
+    description: Official Hathor Network helm chart for hathor-core full-node.
+    digest: bcaebdd75f7f8e1f74bc588a601be639e87fe5e767938a122fc811fd90fa5663
+    maintainers:
+    - email: contact@hathor.network
+      name: Hathor Team
+    name: hathor-fullnode
+    sources:
+    - https://github.com/HathorNetwork/hathor-core
+    type: application
+    urls:
+    - https://github.com/HathorNetwork/helm-charts/releases/download/hathor-fullnode-0.2.0/hathor-fullnode-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: v0.41.0
     created: "2021-09-07T01:16:08.809445895Z"
     description: Official Hathor Network helm chart for hathor-core full-node.
     digest: 49aaacbce709a7c3d62af35293b9561571531a5f57958ac68b61dab6102b49a7
