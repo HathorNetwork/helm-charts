@@ -82,7 +82,7 @@ spec:
             {{ if .Values.hathor.additionalOptions.cache.enabled }}
             - '--cache'
             - '--cache-size'
-            - {{ .Values.hathor.additionalOptions.cache.size }} 
+            - '{{ .Values.hathor.additionalOptions.cache.size }}'
             {{ end }}
             {{ if .Values.hathor.additionalOptions.xFastInitBeta }}
             - '--x-fast-init-beta'
