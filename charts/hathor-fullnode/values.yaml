@@ -3,9 +3,18 @@
 # Declare variables to be passed into your templates.
 
 hathor:
+  network: testnet
   snapshotUrl: https://hathor-public-files.s3.amazonaws.com/temp/testnet-data-latest
   # For mainnet:
   # snapshotUrl: https://hathor-public-files.s3.amazonaws.com/temp/mainnet-data-latest
+
+  # Check https://github.com/HathorNetwork/hathor-core/blob/master/hathor/cli/run_node.py
+  additionalOptions:
+    cache:
+      enabled: true
+      size: '100000'
+    xFastInitBeta: true
+    walletIndex: true
 
 statefulset:
   # You should avoid using more than 1 replica. The application is not prepared to handle concurrent access in the database.

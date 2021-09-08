@@ -64,7 +64,32 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: ['run_node', '--testnet', '--data', '/data', '--peer', '/data/peer_id.json', '--cache', '--cache-size', '1000']
+          args:
+            - run_node
+            - '--listen'
+            - 'tcp:40403'
+            - '--status'
+            - '8080'
+            - '--recursion-limit'
+            - '5000'
+            {{ if ne .Values.hathor.network "mainnet" }}
+            - '--testnet'
+            {{ end }}
+            - '--data'
+            - '/data'
+            - '--peer'
+            - '/data/peer_id.json'
+            {{ if .Values.hathor.additionalOptions.cache.enabled }}
+            - '--cache'
+            - '--cache-size'
+            - {{ .Values.hathor.additionalOptions.cache.size }} 
+            {{ end }}
+            {{ if .Values.hathor.additionalOptions.xFastInitBeta }}
+            - '--x-fast-init-beta'
+            {{ end }}
+            {{ if .Values.hathor.additionalOptions.walletIndex }}
+            - '--wallet-index'
+            {{ end }}
           ports:
             - name: http
               containerPort: 8080
