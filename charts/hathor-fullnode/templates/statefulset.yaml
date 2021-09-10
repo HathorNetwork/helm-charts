@@ -49,7 +49,7 @@ spec:
           - -c
           - |-
             if ! [ -d "/data/data_v2.db" ] ; then
-              wget -P /data $(wget -qO- {{ .Values.hathor.snapshotUrl }})
+              wget -P /data $(wget -qO- https://hathor-public-files.s3.amazonaws.com/temp/{{ .Values.hathor.network }}-data-latest)
             fi 
             if [ -f /data/*.tar.gz ] ; then
               tar xzvf /data/*.tar.gz

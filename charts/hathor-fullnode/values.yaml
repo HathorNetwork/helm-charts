@@ -4,9 +4,7 @@
 
 hathor:
   network: testnet
-  snapshotUrl: https://hathor-public-files.s3.amazonaws.com/temp/testnet-data-latest
-  # For mainnet:
-  # snapshotUrl: https://hathor-public-files.s3.amazonaws.com/temp/mainnet-data-latest
+  # network: mainnet
 
   # Check https://github.com/HathorNetwork/hathor-core/blob/master/hathor/cli/run_node.py
   additionalOptions:
