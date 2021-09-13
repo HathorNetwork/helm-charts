@@ -1,0 +1,11 @@
+apiVersion: v2
+name: hathor-fullnode
+description: Official Hathor Network helm chart for hathor-core full-node.
+maintainers:
+- email: contact@hathor.network
+  name: Hathor Team
+type: application
+version: 0.3.1
+appVersion: "v0.42.0"
+sources:
+  - https://github.com/HathorNetwork/hathor-core
