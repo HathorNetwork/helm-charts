@@ -7,7 +7,7 @@ hathor:
   # network: mainnet
 
   # Check https://github.com/HathorNetwork/hathor-core/blob/master/hathor/cli/run_node.py
-  additionalOptions:
+  cliOptions:
     cache:
       enabled: true
       size: '100000'

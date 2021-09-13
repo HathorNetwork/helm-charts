@@ -79,15 +79,15 @@ spec:
             - '/data'
             - '--peer'
             - '/data/peer_id.json'
-            {{ if .Values.hathor.additionalOptions.cache.enabled }}
+            {{ if .Values.hathor.cliOptions.cache.enabled }}
             - '--cache'
             - '--cache-size'
-            - '{{ .Values.hathor.additionalOptions.cache.size }}'
+            - '{{ .Values.hathor.cliOptions.cache.size }}'
             {{ end }}
-            {{ if .Values.hathor.additionalOptions.xFastInitBeta }}
+            {{ if .Values.hathor.cliOptions.xFastInitBeta }}
             - '--x-fast-init-beta'
             {{ end }}
-            {{ if .Values.hathor.additionalOptions.walletIndex }}
+            {{ if .Values.hathor.cliOptions.walletIndex }}
             - '--wallet-index'
             {{ end }}
           ports:
